@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { PagesList } from './PagesList';
 import apiURL from '../api';
+import Article from "./Article";
 
 export const App = () => {
   const [pages, setPages] = useState([]);
   const [selectedPage, setSelectedPage] = useState(null);
+  const [isAddingArticle, setIsAddingArticle] = useState(false);
+
+  const showAddingArticle = () => setIsAddingArticle(true);
+  const returnToHomePage = () => {
+    setIsAddingArticle(false);
+    setSelectedPage(null); 
+  };
 
   useEffect(() => {
     async function fetchPages() {
@@ -38,18 +46,23 @@ export const App = () => {
     <main>
       <h1>WikiVerse</h1>
       <h2>An interesting 📚</h2>
-      {selectedPage ? (
+
+      {isAddingArticle ? (
+        <Article returnToHomePage={returnToHomePage} />
+      ) : selectedPage ? (
         <>
           <h3>{selectedPage.title}</h3>
-          <h4>Author: {selectedPage.author.name}</h4> {/* Update this to fetch the author name if needed */}
+          <h4>Author: {selectedPage.author.name}</h4>
           <h4>{selectedPage.content}</h4>
-          <h4>Tags: {selectedPage.tags.map(function (tag) { return tag.name; }).join(', ')}</h4>
+          <h4>Tags: {selectedPage.tags.map(tag => tag.name).join(', ')}</h4>
           <h4>Created At: {new Date(selectedPage.createdAt).toLocaleDateString('en-GB')}</h4>
           <button onClick={handleBackToList}>Back to Wiki List</button>
         </>
       ) : (
-
-        <PagesList pages={pages} onPageClick={handlePageClick} />
+        <>
+          <button onClick={showAddingArticle}>Add Article</button>
+          <PagesList pages={pages} onPageClick={handlePageClick} />
+        </>
       )}
     </main>
   );

@@ -1,13 +1,15 @@
 import React from "react"
 import { useState } from "react"
+import apiURL from "../api"
 
 function Article({returnToHomePage}) {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [authorName, setAuthorName] = useState("");
-    const [authorEmail, setAuthorEmial] = useState("");
+    const [authorEmail, setAuthorEmail] = useState("");
     const [tags, setTags] = useState("");
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -15,7 +17,8 @@ function Article({returnToHomePage}) {
         const newArticle = {
             title,
             content,
-            author: { name: authorName, email: authorEmail },
+            name: authorName,
+            email: authorEmail,
             tags: tags.split(" ").map(tag => tag.trim()),
         };
 
@@ -25,12 +28,13 @@ function Article({returnToHomePage}) {
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(articleData) // Send the article data here
+              body: JSON.stringify(newArticle) // Send the article data here
             });
       
             if (response.ok) {
               const data = await response.json(); // Parse the JSON response
               console.log('Article created:', data); // Log the created article
+              onArticleAdded(data);
               returnToHomePage(); // Go back to the home page after successful submission
             } else {
               console.error('Failed to create article');
@@ -73,7 +77,7 @@ function Article({returnToHomePage}) {
             <input
             type="email"
             value={authorEmail}
-            onChange={(event) => setAuthorEmial(event.target.value)}
+            onChange={(event) => setAuthorEmail(event.target.value)}
             required/>
         </div>
         <div>

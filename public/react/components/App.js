@@ -42,6 +42,10 @@ export const App = () => {
     setSelectedPage(null);
   };
 
+  const handleArticleAdded = (newArticle) => {
+    setPages(prevPages => [...prevPages, newArticle]); // Add the new article to the existing list
+};
+
   return (
     <main>
       <h1>WikiVerse</h1>

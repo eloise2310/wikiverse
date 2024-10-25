@@ -81,9 +81,10 @@ function Article({returnToHomePage}) {
             <input
             type="text"
             value={tags}
-            onChange={(event) => setTitle(event.target.value)}
+            onChange={(event) => setTags(event.target.value)}
             />
         </div>
+        <button type="submit">Submit Article</button>
     </form>
     <button onClick={returnToHomePage}>Return to Home Page</button>
     
